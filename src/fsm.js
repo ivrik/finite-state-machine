@@ -1,39 +1,48 @@
 class FSM {
-    /**
-     * Creates new FSM instance.
-     * @param config
-     */
-    constructor(config) {}
+    constructor(config) {
+        if (!config){
+            throw new error();
+        }
+        this.initial = config.initial;
+        this.state = this.initial;
+        this.prev = null;
+        this.deletedState = null;
+        this.states = config.states;
+    }
 
-    /**
-     * Returns active state.
-     * @returns {String}
-     */
-    getState() {}
+    getState() {
+        return this.state;
+    }
 
-    /**
-     * Goes to specified state.
-     * @param state
-     */
-    changeState(state) {}
+    
+    changeState(state) {
+        this.prev = this.state;
 
-    /**
-     * Changes state according to event transition rules.
-     * @param event
-     */
-    trigger(event) {}
+        if (this.states[state]){
+            this.state = state;
+        }else {
+            throw new error(); 
+        }
+    }
 
-    /**
-     * Resets FSM state to initial.
-     */
-    reset() {}
+        trigger(event) {
+        this.prev = this.state;
 
-    /**
-     * Returns an array of states for which there are specified event transition rules.
-     * Returns all states if argument is undefined.
-     * @param event
-     * @returns {Array}
-     */
+        if(this.states[this.state].transitions[event]){
+            this.changeState(this.states[this.state].transitions[event]);
+        } else {
+            throw new error();
+        }
+    }
+
+    
+    reset() {
+        this.prev = null;
+        this.state = this.initial;
+       return this.state;
+
+    }
+
     getStates(event) {}
 
     /**
